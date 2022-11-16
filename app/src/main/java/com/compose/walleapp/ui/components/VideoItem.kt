@@ -29,7 +29,7 @@ import com.compose.walleapp.model.entity.VideoEntity
  * @desc    .
  */
 @Composable
-fun VideoItem(video: VideoEntity) {
+fun VideoItem(video: VideoEntity,modifier: Modifier = Modifier) {
 
 
     val constraintSet = ConstraintSet {
@@ -66,7 +66,7 @@ fun VideoItem(video: VideoEntity) {
         }
     }
 
-    ConstraintLayout(constraintSet, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+    ConstraintLayout(constraintSet, modifier = modifier.fillMaxWidth().padding(8.dp)) {
         AsyncImage(
             model = video.imageUrl,
             contentScale = ContentScale.Crop,

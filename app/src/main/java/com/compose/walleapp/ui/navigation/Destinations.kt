@@ -10,4 +10,6 @@ sealed class Destinations(val route:String){
     object HomeFragment:Destinations("HomeFragment")
     //文章详情页
     object ArticleDetail:Destinations("ArticleDetail")
+    //文章详情页
+    object VideoDetail:Destinations("VideoDetail")
 }
