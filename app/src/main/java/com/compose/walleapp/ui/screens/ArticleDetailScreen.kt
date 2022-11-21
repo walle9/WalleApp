@@ -114,7 +114,10 @@ fun ArticleDetailScreen(viewModel: ArticleViewModel = viewModel(), onBack: () ->
         sheetPeekHeight = 0.dp
 
     ) {
-        WebView(webViewState)
+        Box(modifier = Modifier.navigationBarsPadding()) {
+            WebView(webViewState)
+        }
+
 
     }
 }

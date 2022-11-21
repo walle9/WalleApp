@@ -18,6 +18,8 @@ class VideoViewModel : ViewModel() {
     var videoUrl by mutableStateOf("http://vfx.mtime.cn/Video/2019/03/09/mp4/190309153658147087.mp4")
         private set
 
+    var coverUrl by mutableStateOf("https://docs.bughub.icu/compose/assets/banner1.webp")
+        private set
     //文章数据列表
     var list = listOf(
         VideoEntity(

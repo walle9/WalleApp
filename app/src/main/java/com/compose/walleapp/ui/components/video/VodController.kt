@@ -4,8 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.SaverScope
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
-import com.tencent.rtmp.ITXLivePlayListener
 import com.tencent.rtmp.ITXVodPlayListener
 import com.tencent.rtmp.TXLiveConstants
 import com.tencent.rtmp.TXVodPlayer
@@ -15,9 +18,10 @@ import com.tencent.rtmp.TXVodPlayer
  * @date    2022/11/15
  * @desc    .
  */
-class VodContorller(context: Context) {
-
-    val playerValue = PlayerValue()
+class VodController(
+    context: Context,
+    val playerValue: PlayerValue
+) {
 
     val vodPlayer = TXVodPlayer(context).apply {
         setVodListener(object : ITXVodPlayListener {
@@ -56,8 +60,16 @@ class VodContorller(context: Context) {
     /**
      * 开始播放
      */
-    fun startPlay(url: String) {
-        vodPlayer.startVodPlay(url)
+    fun startPlay() {
+        playerValue.vodeoUrl = playerValue.vodeoUrl
+        vodPlayer.startVodPlay(playerValue.vodeoUrl)
+    }
+
+    /**
+     * 配置改变后重新播放
+     */
+    fun restore(){vodPlayer.setStartTime(playerValue.currentPosition/1000f)
+        startPlay()
     }
 
     /**
@@ -93,6 +105,27 @@ class VodContorller(context: Context) {
 }
 
 @Composable
-fun rememberVodController(context: Context = LocalContext.current) = remember {
-    VodContorller(context)
+fun rememberVodController(
+    context: Context = LocalContext.current,
+    videoUrl: String,
+    coverUrl: String? = "",
+    title: String? = "",
+) = rememberSaveable(saver = object : Saver<VodController, PlayerValue> {
+    override fun restore(value: PlayerValue): VodController? {
+        return VodController(context, value)
+    }
+
+    override fun SaverScope.save(value: VodController): PlayerValue {
+        return value.playerValue
+    }
+}) {
+    val playerValue = PlayerValue()
+    playerValue.vodeoUrl = videoUrl
+    playerValue.coverUrl = coverUrl?:""
+    playerValue.title = title?:""
+    VodController(context, playerValue)
 }
+/*
+= remember {
+    VodController(context,coverUrl,videoUrl,title)
+}*/
