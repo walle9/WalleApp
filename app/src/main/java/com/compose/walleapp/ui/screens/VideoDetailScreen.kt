@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateBefore
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -56,23 +57,7 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
         )
     }
 
-    LaunchedEffect(configuration.orientation) {
-        vodController.restore()
-        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            videoBoxModifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(16 / 9f)
-            systemUiController.isSystemBarsVisible = true
-            scaffoldModifier = Modifier
-                .background(Blue700)
-                .statusBarsPadding()
-        } else {
-            videoBoxModifier = Modifier.fillMaxSize()
-            systemUiController.isSystemBarsVisible = false
-            systemUiController.setSystemBarsColor(Color.Transparent)
-            scaffoldModifier = Modifier
-        }
-    }
+
 
     val webViewState = rememberWebViewState(data = videoViewModel.videoDesc)
     Scaffold(
@@ -105,14 +90,34 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
 
         Column(modifier = Modifier
             .fillMaxWidth()
-            .navigationBarsPadding()) {
+            ) {
+
+            LaunchedEffect(configuration.orientation) {
+                vodController.restore()
+                if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    videoBoxModifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(16 / 9f)
+                    systemUiController.isSystemBarsVisible = true
+                    scaffoldModifier = Modifier
+                        .background(Blue700)
+                        .statusBarsPadding()
+                } else {
+                    videoBoxModifier = Modifier.fillMaxSize()
+                    systemUiController.isSystemBarsVisible = false
+                    systemUiController.setSystemBarsColor(Color.Transparent)
+                    scaffoldModifier = Modifier
+                }
+            }
+
+
             //视频区域
             Box(modifier = videoBoxModifier) {
                 VideoPlayer(vodController)
             }
 
             //简介
-            WebView(state = webViewState)
+            //WebView(state = webViewState)
 
         }
 
