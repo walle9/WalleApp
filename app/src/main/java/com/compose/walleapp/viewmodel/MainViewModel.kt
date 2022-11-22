@@ -22,10 +22,10 @@ class MainViewModel : ViewModel() {
     //分类数据
     val categories by mutableStateOf(
         listOf(
-            Category("思想政治"),
-            Category("法律法规"),
-            Category("职业道德"),
-            Category("诚信自律")
+            Category("思想政治","1"),
+            Category("法律法规","2"),
+            Category("职业道德","3"),
+            Category("诚信自律","4")
         )
     )
 

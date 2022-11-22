@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,8 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import coil.compose.AsyncImage
 import java.util.Timer
 import java.util.TimerTask
@@ -71,6 +76,30 @@ fun VideoPlayer(vodController: VodController) {
     val configuration = LocalConfiguration.current
 
     val context = LocalContext.current
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    //监听生命周期
+    DisposableEffect(vodController) {
+        val lifecycleEventObserver = LifecycleEventObserver{ _, event: Lifecycle.Event ->
+            when(event) {
+                Lifecycle.Event.ON_RESUME-> vodController.resume()
+                Lifecycle.Event.ON_PAUSE-> vodController.pause()
+                else ->{}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(lifecycleEventObserver)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(lifecycleEventObserver)
+            vodController.stopPlay()
+        }
+    }
+
+    //当属于横屏状态时,启用backHandler,监听物理返回,回到竖屏状态,竖屏状态禁用
+    BackHandler (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            context.findActivity()?.requestedOrientation= ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+    }
 
     Box(modifier = Modifier.clickable(interactionSource = remember {
         MutableInteractionSource()

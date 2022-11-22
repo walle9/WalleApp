@@ -107,5 +107,18 @@ dependencies {
     //播放器
     implementation 'com.tencent.liteav:LiteAVSDK_Player:latest.release'
 
+    //datastore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    //retrofit
+    def retrofit = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit"
+
+    def moshi="1.14.0"
+    implementation "com.squareup.moshi:moshi:$moshi"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi"
+
+
 
 }

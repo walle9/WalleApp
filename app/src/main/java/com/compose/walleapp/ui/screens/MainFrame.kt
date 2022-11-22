@@ -24,6 +24,7 @@ import com.compose.walleapp.model.entity.NavigationItem
 fun MainFrame(
     onNavigateToArticle:()->Unit = {},
     onNavigateToVideo:()->Unit = {},
+    onNavigateToHistory:()->Unit = {}
 ) {
 
     val navigationItems = listOf(
@@ -65,7 +66,11 @@ fun MainFrame(
 
         Box(modifier = Modifier.padding(it)) {
             when (currentNavigationIndex) {
-                0 -> StudyScreen(onNavigateToArticle= onNavigateToArticle, onNavigateToVideo = onNavigateToVideo)
+                0 -> StudyScreen(
+                    onNavigateToArticle = onNavigateToArticle,
+                    onNavigateToVideo = onNavigateToVideo,
+                    onNavigateToHistory = onNavigateToHistory
+                )
                 1 -> TaskScreen()
                 2 -> MineScreen()
             }
