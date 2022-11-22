@@ -103,7 +103,7 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
                         .background(Blue700)
                         .statusBarsPadding()
                 } else {
-                    videoBoxModifier = Modifier.fillMaxSize()
+                    videoBoxModifier = Modifier.fillMaxSize(1f)
                     systemUiController.isSystemBarsVisible = false
                     systemUiController.setSystemBarsColor(Color.Transparent)
                     scaffoldModifier = Modifier
@@ -112,9 +112,11 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
 
 
             //视频区域
-            Box(modifier = videoBoxModifier) {
+            Row(modifier = videoBoxModifier) {
                 VideoPlayer(vodController)
             }
+
+
 
             //简介
             //WebView(state = webViewState)
