@@ -10,10 +10,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,6 +27,9 @@ import com.compose.walleapp.viewmodel.ArticleViewModel
 import com.compose.walleapp.viewmodel.MainViewModel
 import com.compose.walleapp.viewmodel.VideoViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.placeholder.placeholder
 
 
 /**
@@ -43,6 +48,11 @@ fun StudyScreen(
     onNavigateToVideo:()->Unit = {},
     onNavigateToHistory:()->Unit = {}
 ) {
+    
+    LaunchedEffect(Unit) {
+        vm.categoryData()
+    }
+    
     Column {
         //标题栏
         TopAppBar(modifier = Modifier.padding(8.dp)) {
@@ -105,7 +115,7 @@ fun StudyScreen(
                 ) {
                     Text(
                         text = category.title,
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier.padding(vertical = 8.dp).placeholder(visible = !vm.categoryLoaded,color= Color.LightGray),
                         fontSize = 14.sp
                     )
                 }
@@ -125,6 +135,7 @@ fun StudyScreen(
                     selected = vm.currentTypeIndex == index,
                     selectedContentColor = Color(0xff149ee7),
                     unselectedContentColor = Color(0xff666666),
+
                     onClick = {
                         vm.updateCurrentTypeIndex(index)
                     },

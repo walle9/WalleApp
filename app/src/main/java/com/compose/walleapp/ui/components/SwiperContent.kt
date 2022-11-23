@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,6 +21,11 @@ import com.compose.walleapp.viewmodel.MainViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.sql.Time
 import java.util.Timer
@@ -34,7 +40,7 @@ import kotlin.concurrent.timerTask
 
 @Composable
 fun SwiperContent(vm: MainViewModel) {
-    
+
     //虚拟页数
     val virtualCount = Int.MAX_VALUE
     //实际页数
@@ -46,17 +52,23 @@ fun SwiperContent(vm: MainViewModel) {
 
     val rememberCoroutineScope = rememberCoroutineScope()
 
-    DisposableEffect(key1 = Unit){
-        val timer=Timer()
+    DisposableEffect(key1 = Unit) {
+        rememberCoroutineScope.launch {
+            vm.swiperData()
+        }
+
+
+        val timer = Timer()
         timer.schedule(object : TimerTask() {
             override fun run() {
-                rememberCoroutineScope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage+1)
+                if (vm.categoryLoaded) {
+                    rememberCoroutineScope.launch {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
                 }
-
             }
 
-        },3000,3000)
+        }, 3000, 3000)
         onDispose {
             timer.cancel()
         }
@@ -70,15 +82,21 @@ fun SwiperContent(vm: MainViewModel) {
         //itemSpacing = 16.dp,
         modifier = Modifier
             .padding(horizontal = 8.dp)
-            .clip(RoundedCornerShape(8.dp))
-    ) { page ->
-        val actualIndex = (page-initialIndex).floorMod(actualCount)
+            .clip(RoundedCornerShape(8.dp)),
+        userScrollEnabled = vm.swiperLoaded
+        ) { page ->
+        val actualIndex = (page - initialIndex).floorMod(actualCount)
         AsyncImage(
             model = vm.swiperData[actualIndex].imageUrl,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(7 / 3f),
+                .aspectRatio(7 / 3f)
+                .placeholder(
+                    !vm.swiperLoaded,
+                    highlight = PlaceholderHighlight.shimmer(),
+                    color = Color.LightGray
+                ),
             contentScale = ContentScale.Crop
         )
     }
@@ -91,9 +109,9 @@ fun SwiperContent(vm: MainViewModel) {
 fun SwiperContentPreview() {
 }
 
-fun Int.floorMod(other:Int):Int = when(other) {
-    0-> this
-    else -> this -floorDiv(other)*other
+fun Int.floorMod(other: Int): Int = when (other) {
+    0 -> this
+    else -> this - floorDiv(other) * other
 }
 
 

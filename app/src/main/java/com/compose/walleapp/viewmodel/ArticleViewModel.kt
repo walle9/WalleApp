@@ -1,7 +1,11 @@
 package com.compose.walleapp.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.compose.walleapp.model.entity.ArticleEntity
+import com.compose.walleapp.model.service.ArticleService
 
 /**
  * @author  walle
@@ -11,21 +15,34 @@ import com.compose.walleapp.model.entity.ArticleEntity
 
 class ArticleViewModel : ViewModel() {
 
+    val articleService = ArticleService.instance()
+
+    val pageSize = 10
+    private var pageOffset = 1
+
+
+
     //文章数据列表
-    var list = listOf(
-        ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
-        ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
-        ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
-        ArticleEntity("中国航天3天3连发", "澎湃新闻", "2022-09-27"),
-        ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
-        ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
-        ArticleEntity("中国航天3天3连发", "澎湃新闻", "2022-09-27"),
-        ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
-        ArticleEntity("中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
-        ArticleEntity("中国航天3天3连发", "澎湃新闻", "2022-09-27"),
-        ArticleEntity("中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27")
+    var list by mutableStateOf(
+        listOf(
+            ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
+            ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
+            ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
+            ArticleEntity("中国航天3天3连发", "澎湃新闻", "2022-09-27"),
+            ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
+            ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
+            ArticleEntity("中国航天3天3连发", "澎湃新闻", "2022-09-27"),
+            ArticleEntity("中国航天3天3连发中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
+            ArticleEntity("中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27"),
+            ArticleEntity("中国航天3天3连发", "澎湃新闻", "2022-09-27"),
+            ArticleEntity("中国航天3天3连发中国航天3天3连发", "澎湃新闻", "2022-09-27")
+        )
     )
         private set
+
+    suspend fun fetchArticle() {
+        articleService.list(pageOffset,pageSize)
+    }
 
     //HTML头部
     private val htmlHeader = """

@@ -88,6 +88,9 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
     //带动画的导航
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
+    //placeholder
+    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_version"
+
 
     //lifecycle
     def lifecycle = "2.4.1"
