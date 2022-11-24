@@ -91,6 +91,8 @@ dependencies {
     //placeholder
     implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_version"
 
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
+
 
     //lifecycle
     def lifecycle = "2.4.1"

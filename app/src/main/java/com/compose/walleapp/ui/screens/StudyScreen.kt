@@ -1,9 +1,11 @@
 package com.compose.walleapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,25 +13,27 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.compose.walleapp.extension.OnBottomReached
 import com.compose.walleapp.ui.components.*
 import com.compose.walleapp.ui.components.TopAppBar
 import com.compose.walleapp.viewmodel.ArticleViewModel
 import com.compose.walleapp.viewmodel.MainViewModel
 import com.compose.walleapp.viewmodel.VideoViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.shimmer
-import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.launch
 
 
 /**
@@ -44,18 +48,29 @@ fun StudyScreen(
     vm: MainViewModel = viewModel(),
     articleViewModel: ArticleViewModel = viewModel(),
     videoViewModel: VideoViewModel = viewModel(),
-    onNavigateToArticle:()->Unit = {},
-    onNavigateToVideo:()->Unit = {},
-    onNavigateToHistory:()->Unit = {}
+    onNavigateToArticle: () -> Unit = {},
+    onNavigateToVideo: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {}
 ) {
-    
+
     LaunchedEffect(Unit) {
         //获取分类数据
         //vm.categoryData()
         //获取文章列表数据
         articleViewModel.fetchArticle()
     }
-    
+
+    var coroutineScope = rememberCoroutineScope()
+    var lazyListState = rememberLazyListState()
+
+    lazyListState.OnBottomReached(buffer = 3) {
+        Log.d("TAG", "StudyScreen: 加载更多")
+
+        coroutineScope.launch {
+            articleViewModel.loadMore()
+        }
+    }
+
     Column {
         //标题栏
         TopAppBar(modifier = Modifier.padding(8.dp)) {
@@ -92,13 +107,21 @@ fun StudyScreen(
             Spacer(modifier = Modifier.width(8.dp))
 
             //学习进度
-            Text(text = "学习\n进度", fontSize = 10.sp, color = Color.White, modifier = Modifier.clickable {
-                onNavigateToHistory()
-            })
+            Text(
+                text = "学习\n进度",
+                fontSize = 10.sp,
+                color = Color.White,
+                modifier = Modifier.clickable {
+                    onNavigateToHistory()
+                })
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "26%", fontSize = 12.sp, color = Color.White)
             Spacer(modifier = Modifier.width(8.dp))
-            Icon(imageVector = Icons.Default.Notifications, contentDescription = null, tint = Color.White)
+            Icon(
+                imageVector = Icons.Default.Notifications,
+                contentDescription = null,
+                tint = Color.White
+            )
         }
 
         //分类标签
@@ -118,7 +141,9 @@ fun StudyScreen(
                 ) {
                     Text(
                         text = category.title,
-                        modifier = Modifier.padding(vertical = 8.dp).placeholder(visible = !vm.categoryLoaded,color= Color.LightGray),
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .placeholder(visible = !vm.categoryLoaded, color = Color.LightGray),
                         fontSize = 14.sp
                     )
                 }
@@ -156,29 +181,41 @@ fun StudyScreen(
             }
         }
 
-        LazyColumn() {
-            //轮播图
-            item { SwiperContent(vm = vm) }
-            //通知公告
-            item { NotificationContent(vm) }
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = articleViewModel.refreshing),
+            onRefresh = {
+                coroutineScope.launch {
+                    articleViewModel.refresh()
+                }
 
-            if (vm.showArticle) {
-                //文章列表
-                items(articleViewModel.list) { article ->
-                    ArticleItem(article, modifier = Modifier.clickable {
-                        onNavigateToArticle()
-                    })
+            }) {
+            LazyColumn(state = lazyListState) {
+                //轮播图
+                item { SwiperContent(vm = vm) }
+                //通知公告
+                item { NotificationContent(vm) }
+
+                if (vm.showArticle) {
+                    //文章列表
+                    items(articleViewModel.list) { article ->
+                        ArticleItem(
+                            article,
+                            articleViewModel.listLoaded,
+                            modifier = Modifier.clickable {
+                                onNavigateToArticle()
+                            })
+                    }
+                } else {
+                    //视频列表
+                    items(videoViewModel.list) { video ->
+                        VideoItem(video = video, modifier = Modifier.clickable {
+                            onNavigateToVideo()
+                        })
+                    }
                 }
-            } else {
-                //视频列表
-                items(videoViewModel.list) { video ->
-                    VideoItem(video = video,modifier=Modifier.clickable {
-                        onNavigateToVideo()
-                    })
-                }
+
+
             }
-
-
         }
 
 

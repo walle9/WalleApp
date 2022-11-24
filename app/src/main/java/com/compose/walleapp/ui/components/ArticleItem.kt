@@ -12,6 +12,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.compose.walleapp.model.entity.ArticleEntity
+import com.compose.walleapp.viewmodel.ArticleViewModel
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
+
 
 /**
  * @author  walle
@@ -19,7 +24,7 @@ import com.compose.walleapp.model.entity.ArticleEntity
  * @desc    文章列表item
  */
 @Composable
-fun ArticleItem(article: ArticleEntity,modifier: Modifier = Modifier) {
+fun ArticleItem(article: ArticleEntity,loaded: Boolean,modifier: Modifier = Modifier) {
     Column(modifier = modifier.padding(8.dp)) {
         Text(
             text = article.title,
@@ -27,7 +32,7 @@ fun ArticleItem(article: ArticleEntity,modifier: Modifier = Modifier) {
             fontSize = 16.sp,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp).placeholder(!loaded, highlight = PlaceholderHighlight.shimmer())
         )
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
             Text(
@@ -35,14 +40,16 @@ fun ArticleItem(article: ArticleEntity,modifier: Modifier = Modifier) {
                 fontSize = 10.sp,
                 color = Color(0xff999999),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.placeholder(!loaded, highlight = PlaceholderHighlight.shimmer())
             )
             Text(
                 text = article.timestamp,
                 fontSize = 10.sp,
                 color = Color(0xff999999),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.placeholder(!loaded, highlight = PlaceholderHighlight.shimmer())
             )
         }
         

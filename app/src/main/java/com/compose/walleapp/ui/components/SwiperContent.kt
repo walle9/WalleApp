@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,15 +21,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import com.google.accompanist.placeholder.placeholder
-import com.google.accompanist.placeholder.shimmer
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import java.sql.Time
-import java.util.Timer
-import java.util.TimerTask
-import kotlin.concurrent.timerTask
+import java.util.*
 
 /**
  * @author  walle

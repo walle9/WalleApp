@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.compose.walleapp.model.entity.ArticleEntity
 import com.compose.walleapp.model.entity.VideoEntity
+import com.compose.walleapp.model.service.VideoService
 
 /**
  * @author  walle
@@ -21,81 +22,139 @@ class VideoViewModel : ViewModel() {
     var coverUrl by mutableStateOf("https://docs.bughub.icu/compose/assets/banner1.webp")
         private set
     //文章数据列表
-    var list = listOf(
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner2.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner3.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner3.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner2.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner3.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner2.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner2.webp",
-            duration = "00:02:00"
-        ),
-        VideoEntity(
-            title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
-            type = "火箭",
-            imageUrl = "https://docs.bughub.icu/compose/assets/banner3.webp",
-            duration = "00:02:00"
-        ),
+    var list by mutableStateOf(
+        listOf(
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner2.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner3.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner3.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner2.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner3.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner1.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner2.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner2.webp",
+                duration = "00:02:00"
+            ),
+            VideoEntity(
+                title = "9月27日，我国在太原卫星发射中心使用长征六号运载火箭，以“一箭三星”方式，成功将试验十六号A/B星和试验十七号卫星发射升空。",
+                type = "火箭",
+                imageUrl = "https://docs.bughub.icu/compose/assets/banner3.webp",
+                duration = "00:02:00"
+            ),
+        )
     )
         private set
+
+    private val videoService = VideoService.instance()
+    private val pageSize = 10
+    private var pageOffset = 1
+
+    //第一页数据是否加载成功
+    var listLoaded by mutableStateOf(false)
+        private set
+    //是否正在刷新
+    var refreshing by mutableStateOf(false)
+        private set
+
+    //是否能加载更多
+    private var hasMore = false
+
+    suspend fun fetchVideo() {
+        var res = videoService.list(pageOffset, pageSize)
+        //delay(1000)
+        if (res.code == 0 && res.data != null) {
+            var tempList = mutableListOf<VideoEntity>()
+            if (pageOffset != 1) {
+                tempList.addAll(list)
+            }
+            tempList.addAll(res.data!!)
+            list = tempList
+            listLoaded = true
+            hasMore = pageOffset<5
+        } else {
+            val massage = res.massage
+            pageOffset--
+            if (pageOffset<=1) {
+                pageOffset = 1
+            }
+        }
+
+        refreshing = false
+    }
+
+    /**
+     * 下拉刷新
+     */
+    suspend fun refresh() {
+        pageOffset = 1
+        refreshing = true
+        fetchVideo()
+    }
+
+    /**
+     * 加载更多
+     */
+    suspend fun loadMore() {
+        if (hasMore) {
+            pageOffset++
+            fetchVideo()
+        }
+    }
 
    private var videoTitle by mutableStateOf("习近平主持中央政治局常委会会议 分析新冠肺炎疫情形势 部署从严抓好疫情防控工作")
 
