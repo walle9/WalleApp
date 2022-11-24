@@ -50,7 +50,10 @@ fun StudyScreen(
 ) {
     
     LaunchedEffect(Unit) {
-        vm.categoryData()
+        //获取分类数据
+        //vm.categoryData()
+        //获取文章列表数据
+        articleViewModel.fetchArticle()
     }
     
     Column {

@@ -17,7 +17,7 @@ class ArticleViewModel : ViewModel() {
 
     val articleService = ArticleService.instance()
 
-    val pageSize = 10
+    private val pageSize = 10
     private var pageOffset = 1
 
 
@@ -41,7 +41,12 @@ class ArticleViewModel : ViewModel() {
         private set
 
     suspend fun fetchArticle() {
-        articleService.list(pageOffset,pageSize)
+        var res = articleService.list(pageOffset, pageSize)
+        if (res.code==0&&res.data!=null) {
+            list = res.data!!
+        } else{
+            val massage = res.massage
+        }
     }
 
     //HTML头部

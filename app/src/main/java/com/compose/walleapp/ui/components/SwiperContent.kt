@@ -54,7 +54,7 @@ fun SwiperContent(vm: MainViewModel) {
 
     DisposableEffect(key1 = Unit) {
         rememberCoroutineScope.launch {
-            vm.swiperData()
+            //vm.swiperData()
         }
 
 

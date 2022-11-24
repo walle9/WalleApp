@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface ArticleService {
 
-    @GET("/article/list")
+    @GET("article/list")
     suspend fun list(@Query("pageOffset")pageOffset:Int,@Query("pageSize")pageSize:Int): ArticleEntityResponse
 
     companion object{

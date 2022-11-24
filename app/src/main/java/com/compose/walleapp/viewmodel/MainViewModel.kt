@@ -29,7 +29,7 @@ class MainViewModel : ViewModel() {
     var swiperLoaded by mutableStateOf(false)
         private set
 
-    suspend fun categoryData() {
+    /*suspend fun categoryData() {
         val categoryRes = homeService.category()
         if (categoryRes.code==0) {
             categories = categoryRes.data
@@ -38,9 +38,9 @@ class MainViewModel : ViewModel() {
             //不成功的情况下读取message
             val message = categoryRes.massage
         }
-    }
+    }*/
 
-    suspend fun swiperData(){
+    /*suspend fun swiperData(){
         var bannerRes = homeService.banner()
         if (bannerRes.code==0&&bannerRes.data!=null) {
             swiperData = bannerRes.data!!
@@ -49,7 +49,7 @@ class MainViewModel : ViewModel() {
             //不成功的情况下读取message
             val message = bannerRes.massage
         }
-    }
+    }*/
 
     //分类数据
     var categories by mutableStateOf(
