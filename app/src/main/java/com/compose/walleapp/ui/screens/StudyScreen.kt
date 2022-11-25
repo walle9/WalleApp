@@ -55,9 +55,10 @@ fun StudyScreen(
 
     LaunchedEffect(Unit) {
         //获取分类数据
-        //vm.categoryData()
+        vm.categoryData()
         //获取文章列表数据
         articleViewModel.fetchArticle()
+        videoViewModel.fetchVideo()
     }
 
     var coroutineScope = rememberCoroutineScope()
