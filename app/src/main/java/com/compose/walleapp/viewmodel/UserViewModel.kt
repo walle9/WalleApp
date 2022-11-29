@@ -3,7 +3,6 @@ package com.compose.walleapp.viewmodel
 import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -48,17 +47,18 @@ class UserViewModel(context: Context) : ViewModel() {
      * 登录
      */
     suspend fun login(onClose: () -> Unit) {
-
+        error = ""
+        loading = true
         val res = userService.signIn(userName, password)
-        if (res.code ==0 && res.data!=null) {
+        if (res.code == 0 && res.data != null) {
             userInfo = res.data
             //userInfoManage.save(userName)
             onClose()
         } else {
-            val massage = res.massage
+            val message = res.message
+            error = message
         }
-
-
+        loading = false
 
 
     }
@@ -73,4 +73,10 @@ class UserViewModel(context: Context) : ViewModel() {
             userInfo = null
         }
     }
+
+    var loading by mutableStateOf(false)
+        private set
+
+    var error by mutableStateOf("")
+        private set
 }

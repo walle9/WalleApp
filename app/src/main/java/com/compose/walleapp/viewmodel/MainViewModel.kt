@@ -36,7 +36,7 @@ class MainViewModel : ViewModel() {
             categoryLoaded = true
         } else {
             //不成功的情况下读取message
-            val message = categoryRes.massage
+            val message = categoryRes.message
         }
     }
 
@@ -47,7 +47,7 @@ class MainViewModel : ViewModel() {
             swiperLoaded= true
         } else {
             //不成功的情况下读取message
-            val message = bannerRes.massage
+            val message = bannerRes.message
         }
     }
 

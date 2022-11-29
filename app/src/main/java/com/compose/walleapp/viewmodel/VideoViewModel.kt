@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.compose.walleapp.model.entity.ArticleEntity
 import com.compose.walleapp.model.entity.VideoEntity
 import com.compose.walleapp.model.service.VideoService
 
@@ -60,7 +59,7 @@ class VideoViewModel : ViewModel() {
             listLoaded = true
             hasMore = pageOffset < 10
         } else {
-            val massage = res.massage
+            val massage = res.message
             pageOffset--
             if (pageOffset <= 1) {
                 pageOffset = 1
@@ -88,7 +87,7 @@ class VideoViewModel : ViewModel() {
             infoLoaded= true
 
         } else {
-            val massage = res.massage
+            val massage = res.message
         }
     }
 

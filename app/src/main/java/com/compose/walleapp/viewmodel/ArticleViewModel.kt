@@ -1,12 +1,12 @@
 package com.compose.walleapp.viewmodel
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.compose.walleapp.model.entity.ArticleEntity
 import com.compose.walleapp.model.service.ArticleService
-import kotlinx.coroutines.delay
 
 /**
  * @author  walle
@@ -24,6 +24,8 @@ class ArticleViewModel : ViewModel() {
     private val pageSize = 10
     private var pageOffset = 1
 
+    //使用这个不用写临时变量了
+    var list1 = mutableStateListOf<String>()
 
     //文章数据列表
     var list by mutableStateOf(
@@ -59,6 +61,7 @@ class ArticleViewModel : ViewModel() {
         var res = articleService.list(pageOffset, pageSize)
         //delay(1000)
         if (res.code == 0 && res.data != null) {
+            list1.add("")
             var tempList = mutableListOf<ArticleEntity>()
             if (pageOffset != 1) {
                 tempList.addAll(list)
@@ -68,7 +71,7 @@ class ArticleViewModel : ViewModel() {
             listLoaded = true
             hasMore = pageOffset < 10
         } else {
-            val massage = res.massage
+            val massage = res.message
             pageOffset--
             if (pageOffset <= 1) {
                 pageOffset = 1
@@ -142,7 +145,7 @@ class ArticleViewModel : ViewModel() {
     """.trimIndent()
             infoLoaded = true
         } else {
-            var massage = res.massage
+            var massage = res.message
         }
 
     }

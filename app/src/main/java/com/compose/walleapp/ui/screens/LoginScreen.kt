@@ -28,7 +28,7 @@ import com.compose.walleapp.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(onClose:()->Unit= {}) {
+fun LoginScreen(onClose: () -> Unit = {}) {
 
 
     var showPassword by remember {
@@ -37,7 +37,7 @@ fun LoginScreen(onClose:()->Unit= {}) {
 
     val userViewModel = localUserViewModel.current
 
-    val coroutineScope= rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
 
 
     //背景
@@ -120,7 +120,8 @@ fun LoginScreen(onClose:()->Unit= {}) {
                         focusedLabelColor = Color.LightGray,
                         unfocusedLabelColor = Color.LightGray,
                         cursorColor = Color.White
-                    )
+                    ),
+                    enabled = !userViewModel.loading
                 )
                 TextField(
                     value = userViewModel.password,
@@ -155,7 +156,8 @@ fun LoginScreen(onClose:()->Unit= {}) {
 
                             }
                         )
-                    }
+                    },
+                    enabled = !userViewModel.loading
                 )
             }
 
@@ -165,9 +167,20 @@ fun LoginScreen(onClose:()->Unit= {}) {
                     userViewModel.login(onClose = onClose)
                 }
 
-            }) {
-                Text(text = "立即登录", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }, enabled = !userViewModel.loading) {
+                
+                Row {
+                    Text(text = "立即登录", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    if (userViewModel.loading){
+                        CircularProgressIndicator(modifier = Modifier.size(20.dp))
+                    }
+
+                }
+                
+
             }
+
+            Text(text = userViewModel.error,color=Color.Red, fontSize = 13.sp)
 
             //注册
             TextButton(onClick = {}) {
@@ -176,8 +189,6 @@ fun LoginScreen(onClose:()->Unit= {}) {
         }
 
     }
-
-
 
 
 }
