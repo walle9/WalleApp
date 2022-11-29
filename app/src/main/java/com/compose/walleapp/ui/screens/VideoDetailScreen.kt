@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +35,10 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -> Unit) {
+
+    LaunchedEffect(Unit){
+        videoViewModel.fetchInfo()
+    }
 
     val systemUiController = rememberSystemUiController()
 
@@ -111,15 +116,25 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
             }
 
 
-            //视频区域
-            Row(modifier = videoBoxModifier) {
-                VideoPlayer(vodController)
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                //视频区域
+
+
+                if (videoViewModel.infoLoaded) {
+                    Row(modifier = videoBoxModifier) {
+                        VideoPlayer(vodController)
+                    }
+                    //简介
+                    /*WebView(state = webViewState)*/
+                } else{
+                    CircularProgressIndicator()
+                }
             }
 
 
 
-            //简介
-            /*WebView(state = webViewState)*/
+
+
 
         }
 

@@ -25,23 +25,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.compose.walleapp.R
 import com.compose.walleapp.compositionLocal.localUserViewModel
 import com.compose.walleapp.viewmodel.UserViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(onClose:()->Unit= {}) {
 
-    var userName by remember {
-        mutableStateOf("")
-    }
-
-    var password by remember {
-        mutableStateOf("")
-    }
 
     var showPassword by remember {
         mutableStateOf(false)
     }
 
     val userViewModel = localUserViewModel.current
+
+    val coroutineScope= rememberCoroutineScope()
 
 
     //背景
@@ -106,8 +102,8 @@ fun LoginScreen(onClose:()->Unit= {}) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TextField(
-                    value = userName,
-                    onValueChange = { userName = it },
+                    value = userViewModel.userName,
+                    onValueChange = { userViewModel.userName = it },
                     singleLine = true,
                     leadingIcon = {
                         Icon(
@@ -127,8 +123,8 @@ fun LoginScreen(onClose:()->Unit= {}) {
                     )
                 )
                 TextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value = userViewModel.password,
+                    onValueChange = { userViewModel.password = it },
                     singleLine = true,
                     leadingIcon = {
                         Icon(
@@ -165,7 +161,10 @@ fun LoginScreen(onClose:()->Unit= {}) {
 
             //登录
             TextButton(onClick = {
-                userViewModel.login(onClose = onClose)
+                coroutineScope.launch {
+                    userViewModel.login(onClose = onClose)
+                }
+
             }) {
                 Text(text = "立即登录", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }

@@ -68,7 +68,13 @@ fun StudyScreen(
         Log.d("TAG", "StudyScreen: 加载更多")
 
         coroutineScope.launch {
-            articleViewModel.loadMore()
+
+            if (vm.showArticle) {
+                articleViewModel.loadMore()
+            } else {
+                videoViewModel.loadMore()
+            }
+
         }
     }
 
@@ -183,10 +189,16 @@ fun StudyScreen(
         }
 
         SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = articleViewModel.refreshing),
+            state = rememberSwipeRefreshState(isRefreshing = if(vm.showArticle)articleViewModel.refreshing else videoViewModel.refreshing),
             onRefresh = {
                 coroutineScope.launch {
-                    articleViewModel.refresh()
+                    if (vm.showArticle) {
+                        articleViewModel.refresh()
+
+                    } else {
+                        videoViewModel.refresh()
+                    }
+
                 }
 
             }) {
@@ -209,7 +221,7 @@ fun StudyScreen(
                 } else {
                     //视频列表
                     items(videoViewModel.list) { video ->
-                        VideoItem(video = video, modifier = Modifier.clickable {
+                        VideoItem(video = video,videoViewModel.listLoaded, modifier = Modifier.clickable {
                             onNavigateToVideo()
                         })
                     }

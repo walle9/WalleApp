@@ -22,6 +22,9 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import com.compose.walleapp.model.entity.ArticleEntity
 import com.compose.walleapp.model.entity.VideoEntity
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 
 /**
  * @author  walle
@@ -29,7 +32,7 @@ import com.compose.walleapp.model.entity.VideoEntity
  * @desc    .
  */
 @Composable
-fun VideoItem(video: VideoEntity,modifier: Modifier = Modifier) {
+fun VideoItem(video: VideoEntity,loaded: Boolean,modifier: Modifier = Modifier) {
 
 
     val constraintSet = ConstraintSet {
@@ -66,7 +69,9 @@ fun VideoItem(video: VideoEntity,modifier: Modifier = Modifier) {
         }
     }
 
-    ConstraintLayout(constraintSet, modifier = modifier.fillMaxWidth().padding(8.dp)) {
+    ConstraintLayout(constraintSet, modifier = modifier
+        .fillMaxWidth()
+        .padding(8.dp)) {
         AsyncImage(
             model = video.imageUrl,
             contentScale = ContentScale.Crop,
@@ -75,6 +80,7 @@ fun VideoItem(video: VideoEntity,modifier: Modifier = Modifier) {
                 .layoutId("cover")
                 .aspectRatio(16 / 9f)
                 .clip(RoundedCornerShape(8.dp))
+                .placeholder(visible = !loaded, highlight = PlaceholderHighlight.shimmer())
         )
         Text(
             text = video.title,
@@ -83,14 +89,16 @@ fun VideoItem(video: VideoEntity,modifier: Modifier = Modifier) {
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.layoutId("title")
+                .placeholder(visible = !loaded, highlight = PlaceholderHighlight.shimmer())
         )
         Text(
-            text = video.type,
+            text = video.type?:"",
             color = Color(0xff999999),
             fontSize = 10.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.layoutId("type")
+                .placeholder(visible = !loaded, highlight = PlaceholderHighlight.shimmer())
         )
         Text(
             text = "时长:${video.duration}",
@@ -99,8 +107,11 @@ fun VideoItem(video: VideoEntity,modifier: Modifier = Modifier) {
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.layoutId("duration")
+                .placeholder(visible = !loaded, highlight = PlaceholderHighlight.shimmer())
         )
 
-        Divider(modifier = Modifier.layoutId("divider").padding(vertical = 8.dp))
+        Divider(modifier = Modifier
+            .layoutId("divider")
+            .padding(vertical = 8.dp))
     }
 }

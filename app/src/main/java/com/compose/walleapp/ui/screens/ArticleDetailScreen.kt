@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateBefore
 import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +34,10 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ArticleDetailScreen(viewModel: ArticleViewModel = viewModel(), onBack: () -> Unit) {
+    
+    LaunchedEffect(Unit){
+        viewModel.fetchInfo()
+    }
 
     val webViewState = rememberWebViewState(data = viewModel.content)
     var fontScale by remember {
@@ -114,8 +119,14 @@ fun ArticleDetailScreen(viewModel: ArticleViewModel = viewModel(), onBack: () ->
         sheetPeekHeight = 0.dp
 
     ) {
-        Box(modifier = Modifier.navigationBarsPadding()) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding(), contentAlignment = Alignment.Center) {
             WebView(webViewState)
+            if (!viewModel.infoLoaded) {
+                CircularProgressIndicator()
+            }
+
         }
 
 
